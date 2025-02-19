@@ -79,10 +79,10 @@ jobs:
         ./scripts/feeds install -a
         
     - name: Download package
+      working-directory: ./openwrt
       id: package
       run: |
-        cd openwrt/
-        make download -j1
+        make download -j$(nproc)
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
