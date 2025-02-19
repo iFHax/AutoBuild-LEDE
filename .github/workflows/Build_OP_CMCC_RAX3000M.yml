@@ -80,9 +80,11 @@ jobs:
 
     - name: Configuration Customization - Build_CMCC_RAX3000M
       run: |
-        chmod +x ./customize.sh && ./customize.sh
         [[ -d "files" ]] && mv -f files openwrt/files
         [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
+        cd openwrt/
+        chmod +x ./customize.sh && ./customize.sh
+
         
     - name: Download package
       id: package
