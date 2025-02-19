@@ -8,6 +8,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   CONFIG_FILE: 'CMCC_RAX3000M.config'
+  DIY_SH: customize.sh
   REPO_BRANCH: master
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
@@ -82,9 +83,9 @@ jobs:
       run: |
         [[ -d "files" ]] && mv -f files openwrt/files
         [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
+        chmod +x ${DIY_SH}
         cd openwrt/
-        chmod +x ./customize.sh && ./customize.sh
-
+        ${DIY_SH}
         
     - name: Download package
       id: package
