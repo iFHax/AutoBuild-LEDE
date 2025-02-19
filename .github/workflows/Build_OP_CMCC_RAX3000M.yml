@@ -83,9 +83,9 @@ jobs:
       run: |
         [[ -d "files" ]] && mv -f files openwrt/files
         [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
-        chmod +x ${DIY_SH}
-        cd openwrt/
-        ./${DIY_SH}
+        chmod +x $DIY_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_SH
         
     - name: Download package
       id: package
