@@ -85,7 +85,7 @@ jobs:
         [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
         chmod +x ${DIY_SH}
         cd openwrt/
-        ${DIY_SH}
+        ./${DIY_SH}
         
     - name: Download package
       id: package
