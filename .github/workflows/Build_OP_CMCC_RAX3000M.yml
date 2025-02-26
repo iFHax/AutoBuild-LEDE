@@ -61,7 +61,6 @@ jobs:
       if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-        cd openwrt
 
     - name: Free up disk space
       env:
@@ -79,9 +78,9 @@ jobs:
         ./scripts/feeds install -a
         
     - name: Download package
-      working-directory: ./openwrt
       id: package
       run: |
+        cd openwrt
         make download -j$(nproc)
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
