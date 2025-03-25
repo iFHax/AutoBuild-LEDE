@@ -62,6 +62,7 @@ jobs:
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
+        echo 'src-git modem https://github.com/FUjr/modem_feeds.git;main' >> feeds.conf.default
 
     - name: Free up disk space
       env:
@@ -77,12 +78,14 @@ jobs:
       run: |
         ./scripts/feeds update -a
         ./scripts/feeds install -a
+        ./scripts/feeds install -a -f -p modem
 
     - name: Configuration Customization - Build_MangoPi_M28C
       run: |
         chmod +x ./customize.sh && ./customize.sh
         [[ -d "files" ]] && mv -f files openwrt/files
         [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
+        cd openwrt && make defconfig
         
     - name: Download package
       id: package
@@ -97,7 +100,7 @@ jobs:
       run: |
         cd openwrt/
         echo -e "$(nproc) thread compile"
-        make -j1 V=s
+        make -j$(nproc)
         echo "status=success" >> ${GITHUB_OUTPUT}
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
