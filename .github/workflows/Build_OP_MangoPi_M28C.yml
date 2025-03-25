@@ -82,6 +82,7 @@ jobs:
 
     - name: Configuration Customization - Build_MangoPi_M28C
       run: |
+        ls
         chmod +x ./customize.sh && ./customize.sh
         [[ -d "files" ]] && mv -f files openwrt/files
         [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
