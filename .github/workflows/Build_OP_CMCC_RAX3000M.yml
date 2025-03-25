@@ -1,13 +1,22 @@
 name: Build_CMCC_RAX3000M
 
 # Add a button to trigger the workflow
-on: 
+
+on:
   repository_dispatch:
   workflow_dispatch:
-  
+    inputs:
+      device_config:
+        description: "Select your device"
+        required: false
+        default: "nand"
+        type: choice
+        options:
+          - nand
+          - emmc
+
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
-  CONFIG_FILE: 'CMCC_RAX3000M.config'
   REPO_BRANCH: master
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
@@ -61,6 +70,8 @@ jobs:
       if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+        cd openwrt
+        echo 'src-git modem https://github.com/FUjr/modem_feeds.git;main' >> feeds.conf.default
 
     - name: Free up disk space
       env:
@@ -76,12 +87,27 @@ jobs:
       run: |
         ./scripts/feeds update -a
         ./scripts/feeds install -a
+
+    - name: Configuration Customization - Build_CMCC_RAX3000M
+      run: |
+        if [[ "${{ inputs.device_config }}" == *"nand"* ]]; then
+            CONFIG_FILE="CMCC_RAX3000M_NAND.config"
+        elif [[ "${{ inputs.device_config }}" == *"emmc"* ]]; then
+            CONFIG_FILE="CMCC_RAX3000M_EMMC.config"
+        else
+            echo "worng device!"
+            exit 1
+        fi
+        chmod +x ./customize.sh && ./customize.sh
+        [[ -d "files" ]] && mv -f files openwrt/files
+        [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
+        cd openwrt && make defconfig
         
     - name: Download package
       id: package
       run: |
-        cd openwrt
-        make download -j$(nproc)
+        cd openwrt/
+        make download -j1
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
@@ -102,7 +128,7 @@ jobs:
 
     - name: Organize files
       id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      if: env.UPLOAD_FIRMWARE == 'true' && steps.compile.outputs.status == 'success'
       run: |
         cd openwrt/bin/targets/*/*
         rm -rf packages
