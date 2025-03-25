@@ -2,7 +2,7 @@
 
 **1. 前提**
   - 登陆 [GitHub Actions](https://github.com/features/actions/signup)
-  - Fork [这个仓库](https://github.com/esirplayground/AutoBuild-OpenWrt)
+  - Fork [这个仓库](https://github.com/LeeHe-gif/AutoBuild-LEDE)
     
 **2. 编译固件**
   - 点击repo顶部的 `[.github/workflows]`文件夹，您可以看到几个工作流文件，每个文件对应一个特定架构的设备。
