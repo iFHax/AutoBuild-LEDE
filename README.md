@@ -1,3 +1,8 @@
+# 自动编译lede的OpenWrt
+[![LICENSE](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat&logo=github&label=LICENSE)](https://github.com/LeeHe-gif/AutoBuild-LEDE/blob/master/LICENSE)
+![GitHub Stars](https://img.shields.io/github/stars/LeeHe-gif/AutoBuild-LEDE.svg?style=flat&logo=appveyor&label=Stars&logo=github)
+![GitHub Forks](https://img.shields.io/github/forks/LeeHe-gif/AutoBuild-LEDE.svg?style=flat&logo=appveyor&label=Forks&logo=github)
+![GitHub last commit](https://img.shields.io/github/last-commit/LeeHe-gif/AutoBuild-LEDE?label=Latest%20Commit&logo=github)
 # 使用github actions 编译[Lean's OpenWrt](https://github.com/coolsnowwolf/lede)   
 
 **1. 前提**
