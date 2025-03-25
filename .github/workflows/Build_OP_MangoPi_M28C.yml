@@ -82,7 +82,8 @@ jobs:
 
     - name: Configuration Customization - Build_MangoPi_M28C
       run: |
-        chmod +x ./customize.sh && ./customize.sh
+        sed -i 's/192.168.1.1/192.168.10.1/g' openwrt/package/base-files/files/bin/config_generate
+        sed -i 's/$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.//g' openwrt/package/lean/default-settings/files/zzz-default-settings
         [[ -d "files" ]] && mv -f files openwrt/files
         [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
         cd openwrt && make defconfig
