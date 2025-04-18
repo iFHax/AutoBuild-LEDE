@@ -85,8 +85,7 @@ jobs:
         ./scripts/feeds install -a -p nas_luci
 
     - name: Configuration Customization - Build_Arcadyan_AW1000
-      run: |
-        chmod +x ./customize.sh && ./customize.sh
+      run: | 
         [[ -d "files" ]] && mv -f files openwrt/files
         [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
         cd openwrt && make defconfig
